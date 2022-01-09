@@ -1,3 +1,4 @@
+# Joseph Shepin
 import os 
 import boto3
 from time import sleep
@@ -5,7 +6,11 @@ from datetime import datetime
 from PIL import Image
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv() #load in those env vars
+
+photosTaken = 1
+photoDelay = int(os.getenv('time_delay'))
+maxPhotos = int(os.getenv('max_photos'))
 
 def getTimeString():
     dateTime = str(datetime.now())
@@ -20,15 +25,19 @@ session = boto3.Session(
 
 client = boto3.client('s3')
 
-#take the image
-os.system('fswebcam -r 1920x1080 --no-banner image.jpg')
-sleep(5)
+while(photosTaken <= maxPhotos):
+    print("taking photo %s/%s" % (photosTaken, maxPhotos))
+    #take the image
+    os.system('fswebcam -p YUYV -d /dev/video0 -r 1920x1080 --no-banner image.jpg')
+    sleep(3) # time it takes for photo to be taken
 
-#compress the image
-filepath = os.path.join(os.getcwd(), "image.jpg")
-picture = Image.open(filepath)
-picture.save("image.jpg", "JPEG", optimize = True, quality = 50)
+    #compress the image
+    filepath = os.path.join(os.getcwd(), "image.jpg")
+    picture = Image.open(filepath)
+    picture.save("image.jpg", "JPEG", optimize = True, quality = 50)
 
-#upload the image
-client.upload_file('image.jpg', os.getenv('S3_bucket'), getTimeString() + '.jpg')
+    #upload the image
+    client.upload_file('image.jpg', os.getenv('S3_bucket'), getTimeString() + '.jpg')
+    photosTaken+=1
+    sleep(photoDelay) # time in between photos
 
