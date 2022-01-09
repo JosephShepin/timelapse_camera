@@ -39,5 +39,5 @@ while(photosTaken <= maxPhotos):
     #upload the image
     client.upload_file('image.jpg', os.getenv('S3_bucket'), getTimeString() + '.jpg')
     photosTaken+=1
-    sleep(photoDelay) # time in between photos
+    sleep(photoDelay - 3) # time in between photos
 
