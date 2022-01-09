@@ -15,3 +15,5 @@ Environment Variables
 If you set `time_delay` to 60, and `max_photos` to 1440, then an entire day will be captured with a photo taken every minute. 
 
 Images are also compressed 50% by default. This can be adjusted for varying levels of quality and desired file sizes.  
+
+It would be recommended to compile the images into a final video using an EC2 instance in the same region as the images, for no data transfer costs to be accrued. Keep in mind, there is a cost for putting and getting the images from S3, however the costs will be neglegible for small jobs. 
