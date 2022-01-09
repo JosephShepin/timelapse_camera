@@ -41,3 +41,4 @@ while(photosTaken <= maxPhotos):
     photosTaken+=1
     sleep(photoDelay - 3) # time in between photos
 
+print("Done taking timelapse photos!")
